@@ -1,75 +1,29 @@
-# OpenFrame Overview
+# Smart Clock Management for Microwatt
+*Dynamic Frequency Scaling (DFS) and Clock Gating for Energy-Efficient OpenPOWER Core*
 
-The OpenFrame Project provides an empty harness chip that differs significantly from the Caravel and Caravan designs. Unlike Caravel and Caravan, which include integrated SoCs and additional features, OpenFrame offers only the essential padframe, providing users with a clean slate for their custom designs.
+## Project Description
+This project explores the integration of smart clock management techniques into the open-source Microwatt processor. The main idea is to introduce Dynamic Frequency Scaling (DFS), which allows the processor to operate at multiple clock frequencies depending on workload demands, and clock gating, which reduces dynamic power by disabling inactive functional units. These techniques aim to make Microwatt more adaptive and energy-efficient while providing a practical platform to study low-power design strategies in open-source hardware.
 
-<img width="256" alt="Screenshot 2024-06-24 at 12 53 39 PM" src="https://github.com/efabless/openframe_timer_example/assets/67271180/ff58b58b-b9c8-4d5e-b9bc-bf344355fa80">
+By adding DFS and clock gating, this project bridges the gap between educational processor cores and modern power-aware design principles commonly used in industry. It allows researchers, students, and hardware enthusiasts to experiment with energy-efficient techniques in a fully open-source PowerISA environment. The project also sets the stage for potential applications in IoT and embedded systems where energy efficiency is critical.
 
-## Key Characteristics of OpenFrame
+---
 
-1. **Minimalist Design:** 
-   - No integrated SoC or additional circuitry.
-   - Only includes the padframe, a power-on-reset circuit, and a digital ROM containing the 32-bit project ID.
+## Project Proposal
 
-2. **Padframe Compatibility:**
-   - The padframe design and pin placements match those of the Caravel and Caravan chips, ensuring compatibility and ease of transition between designs.
-   - Pin types are identical, with power and ground pins positioned similarly and the same power domains available.
+### Problem Statement
+Modern processors, including educational open-source cores like Microwatt, consume dynamic power continuously due to constant clock activity, even when portions of the processor are idle. This leads to unnecessary energy consumption, which is critical in low-power and embedded applications. Currently, Microwatt operates at a fixed frequency without adaptive clock control or fine-grained clock gating.
 
-3. **Flexibility:**
-   - Provides full access to all GPIO controls.
-   - Maximizes the user project area, allowing for greater customization and integration of alternative SoCs or user-specific projects at the same hierarchy level.
+### Objective
+The objective is to enhance Microwatt with a Smart Clock Management Unit (CMU) that:
+1. Supports multiple clock frequencies via Dynamic Frequency Scaling (DFS).
+2. Implements clock gating to disable inactive pipeline stages.
+3. Provides a software-controllable interface to adjust clock frequency and gating.
 
-4. **Simplified I/O:**
-   - Pins that previously connected to CPU functions (e.g., flash controller interface, SPI interface, UART) are now repurposed as general-purpose I/O, offering flexibility for various applications.
+### Expected Outcomes
+- A conceptual design of a Smart Clock Management Unit integrated with Microwatt.
+- Demonstration of how DFS and clock gating improve energy efficiency.
+- A reference platform for studying low-power techniques in open-source processor designs.
+- Documentation and diagrams explaining the design and its benefits.
 
-The OpenFrame harness is ideal for those looking to implement custom SoCs or integrate user projects without the constraints of an existing SoC.
-
-## Features
-
-1. 44 configurable GPIOs.
-2. User area of approximately 15mm².
-3. Supports digital, analog, or mixed-signal designs.
-
-# openframe_timer_example
-
-This example implements a simple timer and connects it to the GPIOs.
-
-## Installation and Setup
-
-First, clone the repository:
-
-```bash
-git clone https://github.com/efabless/openframe_timer_example.git
-cd openframe_timer_example
-```
-
-Then, download all dependencies:
-
-```bash
-make setup
-```
-
-## Hardening the Design
-
-In this example, we will harden the timer. You will need to harden your own design similarly.
-
-```bash
-make user_proj_timer
-```
-
-Once you have hardened your design, integrate it into the OpenFrame wrapper:
-
-```bash
-make openframe_project_wrapper
-```
-
-## Important Notes
-
-1. **Connecting to Power:**
-   - Ensure your design is connected to power using the power pins on the wrapper.
-   - Use the `vccd1_connection` and `vssd1_connection` macros, which contain the necessary vias and nets for power connections.
-
-2. **Flattening the Design:**
-   - If you plan to flatten your design within the `openframe_project_wrapper`, do not buffer the analog pins using standard cells.
-
-3. **Running Custom Steps:**
-   - Execute the custom step in OpenLane that copies the power pins from the template DEF. If this step is skipped, the precheck will fail, and your design will not be powered.
+### Significance
+This project will provide the open-source hardware community with a practical example of energy-efficient processor design, bridging academic and industrial approaches. It will demonstrate how modern power management techniques can be implemented in lightweight, open-source processors, supporting further research and development in energy-aware computing.
